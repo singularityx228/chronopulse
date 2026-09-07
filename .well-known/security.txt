@@ -1,0 +1,4 @@
+Contact: https://github.com/singularityx228/chronopulse/security/policy
+Preferred-Languages: tr, en
+Canonical: https://singularityx228.github.io/chronopulse/.well-known/security.txt
+Policy: https://github.com/singularityx228/chronopulse/security/policy
