@@ -1,0 +1,81 @@
+name: ChronoPulse Security Audit
+
+on:
+  push:
+    branches:
+      - security-hardening
+  pull_request:
+    branches:
+      - security-hardening
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    if: ${{ github.base_ref == 'security-hardening' || github.ref_name == 'security-hardening' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout security-hardening only
+        uses: actions/checkout@v4
+        with:
+          ref: security-hardening
+          fetch-depth: 1
+
+      - name: JavaScript syntax checks
+        shell: bash
+        run: |
+          node --check app.js
+          node --check security-hardening.js
+
+      - name: Security configuration review
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'Content-Security-Policy' index.html
+          grep -q 'permissions-policy' index.html
+          grep -q 'strict-origin-when-cross-origin' index.html
+          grep -q 'security-hardening.js' index.html
+          grep -q 'CHRONOPULSE_SECURITY_GUARD_V1' app.js
+          echo 'Core browser security controls: present'
+
+      - name: Detect common hard-coded secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -RInE --exclude-dir=.git --exclude='security-audit.yml' --exclude='SECURITY.md' \
+            '(AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z_-]{35}|gh[pousr]_[A-Za-z0-9_]{20,}|sk-[A-Za-z0-9]{20,}|-----BEGIN (RSA|EC|OPENSSH|PRIVATE) KEY-----)' .; then
+            echo 'Potential hard-coded secret detected.'
+            exit 1
+          fi
+          echo 'No common hard-coded secret pattern detected'
+
+      - name: Report risky dynamic JavaScript sinks
+        shell: bash
+        run: |
+          set -u
+          echo 'Review candidates (informational):'
+          grep -nE '\beval\s*\(|new[[:space:]]+Function\s*\(|document\.write\s*\(|innerHTML[[:space:]]*=' app.js security-hardening.js || true
+
+      - name: Detect unpinned third-party scripts
+        shell: bash
+        run: |
+          if grep -Eiq '<script[^>]+src="https://(unpkg\.com|cdn\.jsdelivr\.net|cdn\.tailwindcss\.com)/[^"?]*(@latest|/latest)(["?]|$)' index.html; then
+            echo 'WARNING: an external script uses an unpinned/latest URL. Pin it before treating production as hardened.'
+          else
+            echo 'No obvious @latest external script URL detected'
+          fi
+
+      - name: Verify security runtime load order
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          text = Path('index.html').read_text(encoding='utf-8')
+          hard = text.find('security-hardening.js')
+          app = text.find('app.js?v=2.8.0')
+          if hard == -1 or app == -1 or hard > app:
+              raise SystemExit('security-hardening.js must load before app.js')
+          print('Security runtime load order: OK')
+          PY
