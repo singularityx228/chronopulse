@@ -1,4 +1,4 @@
-/* ChronoPulse browser-side security hardening. Defense-in-depth only; authoritative validation must be server-side. */
+/* ChronoPulse browser-side security hardening. This is defense-in-depth, not a replacement for server-side validation. */
 (()=>{
   'use strict';
   const ALLOWED_ORIGIN='https://singularityx228.github.io';
@@ -26,12 +26,6 @@
     if(typeof key==='string' && key.length>256) throw new TypeError('Storage key too long');
     if(typeof value==='string' && value.length>1000000) throw new TypeError('Storage value too large');
     return nativeSetItem.call(this,key,value);
-  };
-
-  const originalOpen=window.open;
-  window.open=function(url,target,features){
-    if(typeof url==='string' && /^https?:\/\//i.test(url) && !/^https:\/\/singularityx228\.github\.io(?:\/|$)/i.test(url)) return null;
-    return originalOpen.call(window,url,target,features);
   };
 
   document.addEventListener('dragstart',e=>{ if(e.target && e.target.tagName==='SCRIPT') e.preventDefault(); },true);
