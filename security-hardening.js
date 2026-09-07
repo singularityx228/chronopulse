@@ -29,4 +29,19 @@
   };
 
   document.addEventListener('dragstart',e=>{ if(e.target && e.target.tagName==='SCRIPT') e.preventDefault(); },true);
+
+  // Deterrent against common browser inspection/devtools shortcuts. This cannot
+  // provide real secrecy: users can always disable JS or inspect network/source.
+  document.addEventListener('keydown',(e)=>{
+    const k=String(e.key||'').toLowerCase();
+    const blocked=e.key==='F12'||
+      (e.ctrlKey&&e.shiftKey&&['i','j','c','k','m','s','e'].includes(k))||
+      (e.ctrlKey&&['u','s','p'].includes(k))||
+      (e.metaKey&&e.altKey&&['i','j','c','u'].includes(k));
+    if(blocked){e.preventDefault();e.stopImmediatePropagation();return false;}
+  },true);
+
+  ['contextmenu','selectstart','dragstart'].forEach(type=>{
+    document.addEventListener(type,e=>{e.preventDefault();e.stopImmediatePropagation();},true);
+  });
 })();
