@@ -1,0 +1,46 @@
+name: ChronoPulse CodeQL Security Scan
+
+on:
+  push:
+    branches:
+      - security-hardening
+    paths:
+      - 'app.js'
+      - 'security-hardening.js'
+      - 'index.html'
+      - '.github/workflows/security-codeql.yml'
+  pull_request:
+    branches:
+      - security-hardening
+    paths:
+      - 'app.js'
+      - 'security-hardening.js'
+      - 'index.html'
+      - '.github/workflows/security-codeql.yml'
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  analyze:
+    if: ${{ github.base_ref == 'security-hardening' || github.ref_name == 'security-hardening' }}
+    name: Analyze JavaScript
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout security-hardening only
+        uses: actions/checkout@v4
+        with:
+          ref: security-hardening
+          fetch-depth: 1
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript
+          queries: security-extended
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: /language:javascript
