@@ -133,13 +133,18 @@
 /* ============ MOD SEÇİM MODALI - TAŞMA DÜZELTMESİ ============ */
 /* 5. mod kartı eklendikten sonra modal ekrana sığmıyordu.
    Panel artık kendi içinde kayabiliyor ve kapatma (X) butonu her zaman görünür. */
-#modeSelectModal #closeModeSelectModalBtn {
-  position: sticky;
-  top: 0;
-  float: right;
-  z-index: 30;
-  margin: -0.25rem -0.25rem 0 0;
-  backdrop-filter: blur(6px);
+/* Panel kaydirilabilir hale geldiginde X butonu ekranda sabit kalsin */
+@media (max-width: 1023px), (max-height: 780px) {
+  #modeSelectModal #closeModeSelectModalBtn {
+    position: fixed;
+    top: 0.9rem;
+    right: 0.9rem;
+    z-index: 60;
+    background: rgba(15, 23, 42, 0.92);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  }
 }
 
 /* Kart içeriklerini biraz sıkılaştır ki dikey alan azalsın */
