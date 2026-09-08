@@ -933,9 +933,75 @@
   }
 
   /* ============================ FONKSİYON SARMALARI ======================= */
+  /* ===================== TEST KAYDI TEMİZLİĞİ =============================
+     Geliştirme sırasında liderlik tablosuna düşen test hesabı kayıtları
+     (TestAli) her istemcide otomatik silinir. Diğer oyuncuların (örn. timmm)
+     kayıtlarına dokunulmaz. */
+  var PURGE_USERS = ['testali'];
+
+  function isPurged(rec) {
+    try {
+      return !!rec && PURGE_USERS.indexOf(String(rec.username || '').trim().toLowerCase()) > -1;
+    } catch (e) { return false; }
+  }
+
+  function purgeTestRecords(republish) {
+    var changed = false;
+    try {
+      if (typeof timiLeaderboardRecords === 'undefined' || !Array.isArray(timiLeaderboardRecords)) return false;
+      var kept = timiLeaderboardRecords.filter(function (r) { return !isPurged(r); });
+      if (kept.length === timiLeaderboardRecords.length) return false;
+      timiLeaderboardRecords = kept;
+      changed = true;
+    } catch (e) { return false; }
+    try {
+      var key = g('TIMI_LEADERBOARD_STORAGE_KEY');
+      if (key) localStorage.setItem(key, JSON.stringify(timiLeaderboardRecords));
+    } catch (e) {}
+    try { if (typeof renderLeaderboard === 'function') renderLeaderboard(); } catch (e) {}
+    if (republish) {
+      try { if (typeof publishLeaderboardRetained === 'function') publishLeaderboardRetained(); } catch (e) {}
+    }
+    return changed;
+  }
+
+  function installPurge() {
+    purgeTestRecords(true);
+    try {
+      if (typeof window.mergeLeaderboardRecords === 'function') {
+        var origMerge = window.mergeLeaderboardRecords;
+        window.mergeLeaderboardRecords = function (records) {
+          var clean = records;
+          try {
+            if (Array.isArray(records)) clean = records.filter(function (r) { return !isPurged(r); });
+          } catch (e) {}
+          var r = origMerge.call(this, clean);
+          purgeTestRecords(false);
+          return r;
+        };
+      }
+    } catch (e) {}
+    try {
+      if (typeof window.showTimiVictoryToast === 'function') {
+        var origToast = window.showTimiVictoryToast;
+        window.showTimiVictoryToast = function (rec) {
+          if (isPurged(rec)) return;
+          return origToast.apply(this, arguments);
+        };
+      }
+    } catch (e) {}
+    /* geç gelen retained/sync mesajları için birkaç kez daha süpür */
+    var n = 0;
+    var iv = setInterval(function () {
+      purgeTestRecords(n === 0);
+      if (++n > 10) clearInterval(iv);
+    }, 3000);
+  }
+
   function install() {
     buildModeCard();
     hookTransport();
+    installPurge();
     /* mqttClient bağlantısı geç kurulabilir */
     var tries = 0;
     var iv = setInterval(function () {
