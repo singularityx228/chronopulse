@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1120"/>
+      <stop offset="50%" stop-color="#090d16"/>
+      <stop offset="100%" stop-color="#030712"/>
+    </linearGradient>
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f5a0"/>
+      <stop offset="50%" stop-color="#00d2ff"/>
+      <stop offset="100%" stop-color="#6366f1"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f5a0"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Squircle Base -->
+  <rect x="16" y="16" width="480" height="480" rx="120" fill="url(#bgGrad)" stroke="url(#borderGrad)" stroke-width="16"/>
+
+  <!-- Stopwatch Top Button -->
+  <rect x="232" y="52" width="48" height="28" rx="8" fill="#38bdf8" />
+  <rect x="216" y="76" width="80" height="12" rx="4" fill="#64748b" />
+  
+  <!-- Outer Gauge Ring -->
+  <circle cx="256" cy="284" r="160" fill="none" stroke="#1e293b" stroke-width="20" stroke-linecap="round"/>
+  <circle cx="256" cy="284" r="160" fill="none" stroke="url(#accentGrad)" stroke-width="20" stroke-linecap="round" stroke-dasharray="750 250" stroke-dashoffset="60" filter="url(#glow)"/>
+
+  <!-- Tick marks -->
+  <line x1="256" y1="140" x2="256" y2="156" stroke="#00f5a0" stroke-width="6" stroke-linecap="round"/>
+  <line x1="400" y1="284" x2="384" y2="284" stroke="#38bdf8" stroke-width="6" stroke-linecap="round"/>
+  <line x1="256" y1="428" x2="256" y2="412" stroke="#64748b" stroke-width="6" stroke-linecap="round"/>
+  <line x1="112" y1="284" x2="128" y2="284" stroke="#64748b" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- Center Timer X Mark -->
+  <!-- Stylized modern "T" + "X" -->
+  <g filter="url(#glow)">
+    <!-- Dynamic X Lines -->
+    <path d="M190 218 L322 350" stroke="#00f5a0" stroke-width="32" stroke-linecap="round"/>
+    <path d="M322 218 L190 350" stroke="#ffffff" stroke-width="32" stroke-linecap="round"/>
+    <path d="M322 218 L272 268" stroke="#00d2ff" stroke-width="32" stroke-linecap="round"/>
+  </g>
+
+  <!-- Center Dot -->
+  <circle cx="256" cy="284" r="14" fill="#090d16" stroke="#00f5a0" stroke-width="8"/>
+</svg>
