@@ -966,7 +966,7 @@
   }
 
   function installPurge() {
-    purgeTestRecords(true);
+    purgeTestRecords(false);
     try {
       if (typeof window.mergeLeaderboardRecords === 'function') {
         var origMerge = window.mergeLeaderboardRecords;
