@@ -1,33 +1,40 @@
 # TimerX - ChronoPulse
 
-**Live online stopwatch / countdown timer / 1v1 VS arena**
+Dunyanin en hassas online kronometresi ve canli 1v1 yarisma platformu.
 
-[![Demo](https://raw.githubusercontent.com/singularityx228/chronopulse/master/og-image.png)](https://singularityx228.github.io/chronopulse/)
+## Ne Yapar?
 
-## What is it?
-- **Millisecond-precision stopwatch** that runs entirely in the browser.
-- **Countdown timer** with custom target times.
-- **Live Turkey clock** that updates every second.
-- **Real-time multiplayer arena** (MQTT-based) where you can battle the AI TiMi bot or other players.
-- **Multiple game modes** - Normal, Ultra-Low, Ultra, Guess, Overstep, etc.
-- **Multi-language UI** (TR / EN / ES) and PWA installation support.
-- **Graphics-performance preset menu** (Ultra Low to Ultra) that automatically saves the choice to localStorage.
+TimerX, milisaniye hassasiyetinde calisan profesyonel bir online kronometre ve geri sayim uygulamasidir. Sadece zaman olcmekle kalmaz, gercek zamanli olarak baska oyuncularla 1v1 yarismaniza da olanak tanir.
 
-## Why this repo?
-- Demonstrates **pure-client-side performance optimizations** (GPU acceleration, throttled updates, memoised formatters).
-- Shows **real-time MQTT sync** for leaderboards and VS matchmaking without any backend server.
-- Provides a **fully responsive Tailwind UI** with dark-mode ready design.
-- Great starter for learning **WebSockets, PWA, and high-precision timing** in JavaScript.
+## Ozellikler
 
-## Security & privacy
-- All **frontend code is obfuscated**; reverse-engineering is deliberately hard.
-- The **core game logic (MQTT broker, bot AI) runs on the client**, so no secret keys or server-side code are exposed.
-- No tracking libraries or third-party analytics are included.
+- **Milisaniye Hassasiyeti** - Saniyenin binde birine kadar kesin olcum yapar. Egzersiz, oyun, deney veya herhangi bir zamanlama ihtiyaci icin mukemmeldir.
+- **Canli Turkiye Saati** - Ekraninizda her saniye guncellenen gercek Turkiye saatini gorebilirsiniz.
+- **1v1 VS Arena** - Arkadaslarinizi davet edin veya rastgele rakiplerle eslesin. Gercek zamanli olarak kim daha hizli durduruyor gorun.
+- **TiMi Yapay Zeka Botu** - Gercek bir rakip bulamadiginizda TiMi botuna karsi oynayabilirsiniz. Farkli zorluk seviyeleri mevcuttur.
+- **Liderlik Tablosu** - En iyi skorlar anlik olarak guncellenir. Dunyada en iyiler arasina girin.
+- **Birden Fazla Oyun Modu** - Normal, Ultra, Tahmin, Asim ve daha fazlasi. Her mod farkli bir meydan okumadir.
+- **Coklu Dil Destegi** - Turkce, Ingilizce ve Ispanyolca arayuz secenekleri.
+- **Grafik Ayarlari** - Ultra Dusuk, Dusuk, Normal ve Ultra grafik seviyeleri arasindan secim yaparak cihaziniza en uygun deneyimi elde edin.
+- **PWA Destegi** - Tarayicinizdan masaustu uygulamasi gibi kurabilirsiniz. Internet baglantisi olmadan bile calisir.
+- **Tamamen Ucretsiz** - Hicbir odeme veya abonelik gerektirmez. Reklamsiz, temiz bir deneyim.
 
-## Play now!
-Visit the live site, pick a graphics preset, and start a stopwatch or a VS battle. The UI automatically remembers your settings across devices.
+## Neden TimerX?
+
+Internetteki cogu kronometre basit ve sikicidir. TimerX ise kronometreyi bir oyuna donusturur. Arkadaslarinizla yarisabilir, kendinizi gelistirebilir ve liderlik tablosunda yerinizi alabilirsiniz.
+
+- Akici ve goze hos gelen modern bir arayuz.
+- Telefon, tablet ve bilgisayarda kusursuz calisir.
+- Hizli acilir, hizli calisir, kaynak tuketmez.
+- Gercek zamanli eslesme ve skor paylasimi.
+- Kisisel en iyi skorlarinizi takip edebilirsiniz.
+
+## Nasil Kullanilir?
+
+Siteyi ziyaret edin, kronometreyi baslatin veya 1v1 moduna girerek bir rakip bulun. Hepsi bu kadar basit!
 
 **https://singularityx228.github.io/chronopulse/**
 
 ---
-*Built with love by **singularityx228** - a hobbyist who loves precise timers and fast web experiences.*
+
+*TimerX - Zamanla yaris, rakiplerini yen, en iyi ol!*
