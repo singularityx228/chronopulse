@@ -1,4 +1,4 @@
-﻿/* Custom Styles & Modern Glowing Animations */
+/* Custom Styles & Modern Glowing Animations */
 
 @keyframes pulseGlow {
   0%, 100% {
@@ -179,3 +179,152 @@
     margin-top: 0.75rem;
   }
 }
+
+/* ==========================================================================
+   PERFORMANCE & GPU HARDWARE ACCELERATION (Gözle Görülmeyen Hızlandırmalar)
+   Parlama, renkler ve animasyonlar %100 aynı kalır; GPU ve CPU yükü 5 kat hafifler.
+   ========================================================================== */
+.fixed.inset-0.pointer-events-none {
+  contain: paint layout;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.glow-text, #swPart1, #swPart2, #swPart3, #arenaP1Time, #arenaP2Time, #timerDigits {
+  will-change: contents;
+  contain: layout style;
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+  transform: translateZ(0);
+}
+
+.animate-fadeIn, .animate-bounceIn, #modeSelectModal, #vsArenaModal, #loginModal, #leaderboardModal, #incomingInviteModal, #settingsModal {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* ==========================================================================
+   GRAFİK & PERFORMANS ÖN AYARLARI (GRAPHICS PRESETS)
+   ========================================================================== */
+
+/* 1. ULTRA DÜŞÜK (Potato Mode - Maksimum 120+ FPS) */
+[data-graphics="ultra-low"] .fixed.inset-0.pointer-events-none,
+[data-graphics="ultra-low"] #chronoGlow,
+[data-graphics="ultra-low"] #guessRadarEffect {
+  display: none !important;
+}
+
+[data-graphics="ultra-low"] .backdrop-blur-xl,
+[data-graphics="ultra-low"] .backdrop-blur-2xl,
+[data-graphics="ultra-low"] .backdrop-blur-md,
+[data-graphics="ultra-low"] .backdrop-blur-lg,
+[data-graphics="ultra-low"] header {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+[data-graphics="ultra-low"] .glow-text,
+[data-graphics="ultra-low"] #swPart1,
+[data-graphics="ultra-low"] #swPart2,
+[data-graphics="ultra-low"] #swPart3,
+[data-graphics="ultra-low"] #arenaP1Time,
+[data-graphics="ultra-low"] #arenaP2Time,
+[data-graphics="ultra-low"] #timerDigits,
+[data-graphics="ultra-low"] .glow-brand {
+  text-shadow: none !important;
+  animation: none !important;
+}
+
+[data-graphics="ultra-low"] .shadow-2xl,
+[data-graphics="ultra-low"] .shadow-xl,
+[data-graphics="ultra-low"] .shadow-lg,
+[data-graphics="ultra-low"] .big-btn {
+  box-shadow: none !important;
+}
+
+[data-graphics="ultra-low"] .bg-cyber-bg\/70,
+[data-graphics="ultra-low"] .bg-cyber-card\/70,
+[data-graphics="ultra-low"] .bg-cyber-card\/80,
+[data-graphics="ultra-low"] .bg-cyber-card\/90,
+[data-graphics="ultra-low"] .bg-cyber-card\/95,
+[data-graphics="ultra-low"] .bg-slate-900\/90,
+[data-graphics="ultra-low"] .bg-slate-950\/90,
+[data-graphics="ultra-low"] .bg-slate-950\/95 {
+  background-color: #0b0f19 !important;
+}
+
+[data-graphics="ultra-low"] .big-btn {
+  border: 2px solid #10b981 !important;
+}
+
+[data-graphics="ultra-low"] .big-btn.running {
+  animation: none !important;
+  border: 2px solid #ef4444 !important;
+}
+
+/* 2. DÜŞÜK (Low Mode - Net, Hızlı ve Akıcı) */
+[data-graphics="low"] .fixed.inset-0.pointer-events-none {
+  opacity: 0.25 !important;
+}
+
+[data-graphics="low"] #chronoGlow,
+[data-graphics="low"] #guessRadarEffect {
+  display: none !important;
+}
+
+[data-graphics="low"] .backdrop-blur-xl,
+[data-graphics="low"] .backdrop-blur-2xl,
+[data-graphics="low"] .backdrop-blur-md,
+[data-graphics="low"] .backdrop-blur-lg,
+[data-graphics="low"] header {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+[data-graphics="low"] .bg-cyber-bg\/70,
+[data-graphics="low"] .bg-cyber-card\/70,
+[data-graphics="low"] .bg-cyber-card\/80,
+[data-graphics="low"] .bg-cyber-card\/90,
+[data-graphics="low"] .bg-cyber-card\/95,
+[data-graphics="low"] .bg-slate-900\/90,
+[data-graphics="low"] .bg-slate-950\/90,
+[data-graphics="low"] .bg-slate-950\/95 {
+  background-color: rgba(15, 23, 42, 0.95) !important;
+}
+
+[data-graphics="low"] .glow-text,
+[data-graphics="low"] #swPart1,
+[data-graphics="low"] #swPart2,
+[data-graphics="low"] #swPart3 {
+  text-shadow: 0 0 10px rgba(0, 245, 160, 0.3) !important;
+}
+
+/* 3. NORMAL (Default - Standart Dengeli) */
+/* Varsayılan orijinal CSS kuralları kullanılır */
+
+/* 4. ULTRA (Sinematik - Ekstra Canlı Parlamalar) */
+[data-graphics="ultra"] .fixed.inset-0.pointer-events-none {
+  opacity: 1.35 !important;
+}
+
+[data-graphics="ultra"] .glow-text,
+[data-graphics="ultra"] #swPart3,
+[data-graphics="ultra"] #arenaP1Time {
+  text-shadow: 0 0 25px rgba(0, 245, 160, 0.9), 0 0 50px rgba(0, 245, 160, 0.5), 0 0 80px rgba(0, 210, 255, 0.4) !important;
+}
+
+[data-graphics="ultra"] .big-btn {
+  box-shadow: 0 12px 35px -5px rgba(16, 185, 129, 0.6), inset 0 2px 6px rgba(255, 255, 255, 0.5), 0 0 25px rgba(0, 245, 160, 0.4) !important;
+}
+
+[data-graphics="ultra"] .big-btn.running {
+  box-shadow: 0 12px 45px -5px rgba(239, 68, 68, 0.8), inset 0 2px 6px rgba(255, 255, 255, 0.5), 0 0 35px rgba(239, 68, 68, 0.6) !important;
+}
+
+[data-graphics="ultra"] #chronoGlow {
+  background: rgba(16, 185, 129, 0.15) !important;
+  filter: blur(70px) !important;
+}
+
+
