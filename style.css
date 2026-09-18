@@ -208,6 +208,95 @@
    GRAFİK & PERFORMANS ÖN AYARLARI (GRAPHICS PRESETS)
    ========================================================================== */
 
+/* 0. MAX DÜŞÜKLÜK (Toaster / Extreme Potato Mode - 0 Kasma, Maksimum Performans) */
+[data-graphics="max-low"] * {
+  animation-duration: 0.001s !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001s !important;
+}
+
+[data-graphics="max-low"] .fixed.inset-0.pointer-events-none,
+[data-graphics="max-low"] #chronoGlow,
+[data-graphics="max-low"] #guessRadarEffect,
+[data-graphics="max-low"] #robotArmContainer,
+[data-graphics="max-low"] .animate-pulse,
+[data-graphics="max-low"] .animate-ping,
+[data-graphics="max-low"] .animate-bounce,
+[data-graphics="max-low"] .animate-spin {
+  display: none !important;
+  animation: none !important;
+}
+
+[data-graphics="max-low"] .backdrop-blur-xl,
+[data-graphics="max-low"] .backdrop-blur-2xl,
+[data-graphics="max-low"] .backdrop-blur-md,
+[data-graphics="max-low"] .backdrop-blur-lg,
+[data-graphics="max-low"] header,
+[data-graphics="max-low"] #leaderboardModal,
+[data-graphics="max-low"] #vsArenaModal,
+[data-graphics="max-low"] #modeSelectModal,
+[data-graphics="max-low"] #settingsModal,
+[data-graphics="max-low"] #loginModal,
+[data-graphics="max-low"] #incomingInviteModal {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+[data-graphics="max-low"] .glow-text,
+[data-graphics="max-low"] #swPart1,
+[data-graphics="max-low"] #swPart2,
+[data-graphics="max-low"] #swPart3,
+[data-graphics="max-low"] #arenaP1Time,
+[data-graphics="max-low"] #arenaP2Time,
+[data-graphics="max-low"] #timerDigits,
+[data-graphics="max-low"] .glow-brand,
+[data-graphics="max-low"] h1,
+[data-graphics="max-low"] h2,
+[data-graphics="max-low"] h3,
+[data-graphics="max-low"] span {
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+[data-graphics="max-low"] .shadow-2xl,
+[data-graphics="max-low"] .shadow-xl,
+[data-graphics="max-low"] .shadow-lg,
+[data-graphics="max-low"] .shadow-md,
+[data-graphics="max-low"] .shadow-sm,
+[data-graphics="max-low"] .big-btn,
+[data-graphics="max-low"] .rounded-3xl,
+[data-graphics="max-low"] .rounded-2xl {
+  box-shadow: none !important;
+}
+
+[data-graphics="max-low"] .bg-cyber-bg,
+[data-graphics="max-low"] .bg-cyber-bg\/70,
+[data-graphics="max-low"] .bg-cyber-card\/70,
+[data-graphics="max-low"] .bg-cyber-card\/80,
+[data-graphics="max-low"] .bg-cyber-card\/90,
+[data-graphics="max-low"] .bg-cyber-card\/95,
+[data-graphics="max-low"] .bg-slate-900\/90,
+[data-graphics="max-low"] .bg-slate-900\/95,
+[data-graphics="max-low"] .bg-slate-950\/80,
+[data-graphics="max-low"] .bg-slate-950\/85,
+[data-graphics="max-low"] .bg-slate-950\/90,
+[data-graphics="max-low"] .bg-slate-950\/95 {
+  background-color: #0b0f19 !important;
+}
+
+[data-graphics="max-low"] .big-btn {
+  border: 2px solid #10b981 !important;
+  background: #10b981 !important;
+  color: #000000 !important;
+}
+
+[data-graphics="max-low"] .big-btn.running {
+  animation: none !important;
+  border: 2px solid #ef4444 !important;
+  background: #dc2626 !important;
+  color: #ffffff !important;
+}
+
 /* 1. ULTRA DÜŞÜK (Potato Mode - Maksimum 120+ FPS) */
 [data-graphics="ultra-low"] .fixed.inset-0.pointer-events-none,
 [data-graphics="ultra-low"] #chronoGlow,
