@@ -438,218 +438,230 @@
 
 
 
+
 /* ==========================================================================
-   5. MAX ULTRA (SİNEMATİK OVERDRIVE - HER ŞEY RENGARENK VE ANİMASYONLU!)
+   5. MAX ULTRA (SİNEMATİK OVERDRIVE - 120 FPS SÜPER AKICI & FULL RGB)
    ========================================================================== */
 
-/* Keyframe Animasyonları */
-@keyframes maxUltraAurora {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+/* 120 FPS Donanım Hızlandırmalı GPU Keyframe Animasyonları */
+@keyframes maxUltraAuroraWave {
+  0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.95; }
+  50% { transform: translate3d(-20px, -15px, 0) scale(1.08); opacity: 1; }
+  100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.95; }
 }
 
 @keyframes orbFloat1 {
-  0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
-  33% { transform: translate(75px, -55px) scale(1.4) rotate(120deg); }
-  66% { transform: translate(-55px, 45px) scale(0.9) rotate(240deg); }
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33% { transform: translate3d(65px, -45px, 0) scale(1.3); }
+  66% { transform: translate3d(-45px, 35px, 0) scale(0.92); }
 }
 
 @keyframes orbFloat2 {
-  0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
-  33% { transform: translate(-85px, 65px) scale(1.35) rotate(-120deg); }
-  66% { transform: translate(65px, -45px) scale(0.85) rotate(-240deg); }
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33% { transform: translate3d(-75px, 55px, 0) scale(1.25); }
+  66% { transform: translate3d(55px, -35px, 0) scale(0.88); }
 }
 
 @keyframes orbFloat3 {
-  0%, 100% { transform: translate(0, 0) scale(1.1); }
-  50% { transform: translate(55px, -75px) scale(1.5); }
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1.1); }
+  50% { transform: translate3d(45px, -60px, 0) scale(1.38); }
 }
 
-@keyframes rainbowShiftText {
-  0% { filter: hue-rotate(0deg); }
-  100% { filter: hue-rotate(360deg); }
+@keyframes rainbowShiftColors {
+  0% { color: #00f5a0; text-shadow: 0 0 15px rgba(0, 245, 160, 0.8); }
+  25% { color: #00d2ff; text-shadow: 0 0 15px rgba(0, 210, 255, 0.8); }
+  50% { color: #c084fc; text-shadow: 0 0 15px rgba(192, 132, 252, 0.8); }
+  75% { color: #ff2a85; text-shadow: 0 0 15px rgba(255, 42, 133, 0.8); }
+  100% { color: #00f5a0; text-shadow: 0 0 15px rgba(0, 245, 160, 0.8); }
 }
 
 @keyframes rainbowBorderPulse {
   0% {
-    border-color: rgba(0, 245, 160, 0.9);
-    box-shadow: 0 0 30px rgba(0, 245, 160, 0.5), 0 0 60px rgba(0, 245, 160, 0.25), inset 0 0 15px rgba(0, 245, 160, 0.2);
+    border-color: #00f5a0;
+    box-shadow: 0 0 20px rgba(0, 245, 160, 0.4), inset 0 0 12px rgba(0, 245, 160, 0.15);
   }
   25% {
-    border-color: rgba(0, 210, 255, 0.9);
-    box-shadow: 0 0 35px rgba(0, 210, 255, 0.55), 0 0 70px rgba(0, 210, 255, 0.3), inset 0 0 20px rgba(0, 210, 255, 0.25);
+    border-color: #00d2ff;
+    box-shadow: 0 0 24px rgba(0, 210, 255, 0.45), inset 0 0 12px rgba(0, 210, 255, 0.18);
   }
   50% {
-    border-color: rgba(168, 85, 247, 0.9);
-    box-shadow: 0 0 40px rgba(168, 85, 247, 0.6), 0 0 80px rgba(168, 85, 247, 0.35), inset 0 0 20px rgba(168, 85, 247, 0.25);
+    border-color: #a855f7;
+    box-shadow: 0 0 26px rgba(168, 85, 247, 0.45), inset 0 0 12px rgba(168, 85, 247, 0.18);
   }
   75% {
-    border-color: rgba(255, 42, 133, 0.9);
-    box-shadow: 0 0 35px rgba(255, 42, 133, 0.55), 0 0 70px rgba(255, 42, 133, 0.3), inset 0 0 20px rgba(255, 42, 133, 0.25);
+    border-color: #ff2a85;
+    box-shadow: 0 0 24px rgba(255, 42, 133, 0.45), inset 0 0 12px rgba(255, 42, 133, 0.18);
   }
   100% {
-    border-color: rgba(0, 245, 160, 0.9);
-    box-shadow: 0 0 30px rgba(0, 245, 160, 0.5), 0 0 60px rgba(0, 245, 160, 0.25), inset 0 0 15px rgba(0, 245, 160, 0.2);
+    border-color: #00f5a0;
+    box-shadow: 0 0 20px rgba(0, 245, 160, 0.4), inset 0 0 12px rgba(0, 245, 160, 0.15);
   }
 }
 
 @keyframes btnRainbowFlow {
   0% {
-    background-position: 0% 50%;
     border-color: #00f5a0;
-    box-shadow: 0 0 25px rgba(0, 245, 160, 0.6), 0 8px 25px -4px rgba(0, 245, 160, 0.5);
+    box-shadow: 0 0 20px rgba(0, 245, 160, 0.55), 0 8px 20px -4px rgba(0, 245, 160, 0.45);
   }
   33% {
-    background-position: 50% 100%;
     border-color: #00d2ff;
-    box-shadow: 0 0 30px rgba(0, 210, 255, 0.65), 0 8px 25px -4px rgba(0, 210, 255, 0.5);
+    box-shadow: 0 0 24px rgba(0, 210, 255, 0.6), 0 8px 20px -4px rgba(0, 210, 255, 0.45);
   }
   66% {
-    background-position: 100% 50%;
     border-color: #ff2a85;
-    box-shadow: 0 0 30px rgba(255, 42, 133, 0.65), 0 8px 25px -4px rgba(255, 42, 133, 0.5);
+    box-shadow: 0 0 24px rgba(255, 42, 133, 0.6), 0 8px 20px -4px rgba(255, 42, 133, 0.45);
   }
   100% {
-    background-position: 0% 50%;
     border-color: #00f5a0;
-    box-shadow: 0 0 25px rgba(0, 245, 160, 0.6), 0 8px 25px -4px rgba(0, 245, 160, 0.5);
+    box-shadow: 0 0 20px rgba(0, 245, 160, 0.55), 0 8px 20px -4px rgba(0, 245, 160, 0.45);
   }
 }
 
 @keyframes btnSecondaryRainbow {
   0% {
-    border-color: rgba(0, 245, 160, 0.6);
-    box-shadow: 0 0 15px rgba(0, 245, 160, 0.35);
+    border-color: rgba(0, 245, 160, 0.7);
+    box-shadow: 0 0 14px rgba(0, 245, 160, 0.3);
   }
   50% {
-    border-color: rgba(168, 85, 247, 0.7);
-    box-shadow: 0 0 22px rgba(168, 85, 247, 0.45);
+    border-color: rgba(168, 85, 247, 0.75);
+    box-shadow: 0 0 18px rgba(168, 85, 247, 0.35);
   }
   100% {
-    border-color: rgba(0, 245, 160, 0.6);
-    box-shadow: 0 0 15px rgba(0, 245, 160, 0.35);
+    border-color: rgba(0, 245, 160, 0.7);
+    box-shadow: 0 0 14px rgba(0, 245, 160, 0.3);
   }
 }
 
 @keyframes inputRgbPulse {
   0% {
     border-color: #00f5a0;
-    box-shadow: 0 0 20px rgba(0, 245, 160, 0.5), inset 0 0 10px rgba(0, 245, 160, 0.2);
+    box-shadow: 0 0 16px rgba(0, 245, 160, 0.45), inset 0 0 8px rgba(0, 245, 160, 0.15);
   }
   50% {
     border-color: #8b5cf6;
-    box-shadow: 0 0 25px rgba(139, 92, 246, 0.6), inset 0 0 10px rgba(139, 92, 246, 0.25);
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.5), inset 0 0 8px rgba(139, 92, 246, 0.2);
   }
   100% {
     border-color: #00f5a0;
-    box-shadow: 0 0 20px rgba(0, 245, 160, 0.5), inset 0 0 10px rgba(0, 245, 160, 0.2);
+    box-shadow: 0 0 16px rgba(0, 245, 160, 0.45), inset 0 0 8px rgba(0, 245, 160, 0.15);
   }
 }
 
 @keyframes rgbLaserGlow {
   0% {
     text-shadow: 
-      0 0 14px rgba(0, 245, 160, 0.95),
-      0 0 35px rgba(0, 245, 160, 0.8),
-      0 0 70px rgba(0, 210, 255, 0.7),
-      0 0 110px rgba(139, 92, 246, 0.55);
+      0 0 10px rgba(0, 245, 160, 0.9),
+      0 0 25px rgba(0, 245, 160, 0.75),
+      0 0 45px rgba(0, 210, 255, 0.55);
   }
   33% {
     text-shadow: 
-      0 0 14px rgba(0, 210, 255, 0.95),
-      0 0 35px rgba(99, 102, 241, 0.85),
-      0 0 70px rgba(255, 42, 133, 0.75),
-      0 0 110px rgba(245, 158, 11, 0.55);
+      0 0 10px rgba(0, 210, 255, 0.9),
+      0 0 25px rgba(99, 102, 241, 0.75),
+      0 0 45px rgba(255, 42, 133, 0.55);
   }
   66% {
     text-shadow: 
-      0 0 14px rgba(255, 42, 133, 0.95),
-      0 0 35px rgba(245, 158, 11, 0.85),
-      0 0 70px rgba(0, 245, 160, 0.75),
-      0 0 110px rgba(0, 210, 255, 0.55);
+      0 0 10px rgba(255, 42, 133, 0.9),
+      0 0 25px rgba(245, 158, 11, 0.75),
+      0 0 45px rgba(0, 245, 160, 0.55);
   }
   100% {
     text-shadow: 
-      0 0 14px rgba(0, 245, 160, 0.95),
-      0 0 35px rgba(0, 245, 160, 0.8),
-      0 0 70px rgba(0, 210, 255, 0.7),
-      0 0 110px rgba(139, 92, 246, 0.55);
+      0 0 10px rgba(0, 245, 160, 0.9),
+      0 0 25px rgba(0, 245, 160, 0.75),
+      0 0 45px rgba(0, 210, 255, 0.55);
   }
 }
 
 @keyframes chronoGlowSpin {
-  0% { transform: rotate(0deg) scale(1); filter: blur(70px) hue-rotate(0deg); }
-  50% { transform: rotate(180deg) scale(1.35); filter: blur(95px) hue-rotate(180deg); }
-  100% { transform: rotate(360deg) scale(1); filter: blur(70px) hue-rotate(360deg); }
+  0% { transform: translate3d(0,0,0) rotate(0deg) scale(1); }
+  50% { transform: translate3d(0,0,0) rotate(180deg) scale(1.2); }
+  100% { transform: translate3d(0,0,0) rotate(360deg) scale(1); }
 }
 
 @keyframes iconBobble {
-  0%, 100% { transform: translateY(0) scale(1) rotate(0deg); filter: drop-shadow(0 0 8px rgba(0, 245, 160, 0.8)); }
-  50% { transform: translateY(-4px) scale(1.15) rotate(5deg); filter: drop-shadow(0 0 16px rgba(255, 42, 133, 0.9)); }
-}
-
-@keyframes cardHoverGlow {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.02); }
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(0, -3px, 0) scale(1.12); }
 }
 
 @keyframes pulseStopMaxUltra {
   0% {
-    transform: scale(1);
-    filter: brightness(1);
-    box-shadow: 0 15px 45px -5px rgba(239, 68, 68, 0.9), 0 0 40px rgba(239, 68, 68, 0.8);
+    transform: translate3d(0,0,0) scale(1);
+    box-shadow: 0 12px 35px -5px rgba(239, 68, 68, 0.85), 0 0 30px rgba(239, 68, 68, 0.75);
   }
   100% {
-    transform: scale(1.04);
-    filter: brightness(1.3);
-    box-shadow: 0 15px 75px -5px rgba(239, 68, 68, 1), 0 0 70px rgba(255, 42, 133, 0.95), 0 0 110px rgba(245, 158, 11, 0.7);
+    transform: translate3d(0,0,0) scale(1.03);
+    box-shadow: 0 14px 50px -5px rgba(239, 68, 68, 0.95), 0 0 50px rgba(255, 42, 133, 0.85);
   }
 }
 
-/* 1. Canlı Hareketli ve Rengarenk Arka Plan */
+/* 1. GPU Hızlandırmalı Arka Plan Katmanı */
 html[data-graphics="max-ultra"],
 body[data-graphics="max-ultra"] {
-  background: linear-gradient(-45deg, #070913, #18092f, #052135, #26073b, #05302b, #2c0548, #090e1d) !important;
-  background-size: 400% 400% !important;
-  animation: maxUltraAurora 10s ease infinite !important;
+  background: #080c16 !important;
+  position: relative;
 }
 
-/* 2. Hareketli Renkli Ambiyans Küreleri */
+body[data-graphics="max-ultra"]::before {
+  content: "";
+  position: fixed;
+  inset: -15%;
+  z-index: -2;
+  pointer-events: none;
+  background: radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.25) 0%, transparent 40%),
+              radial-gradient(circle at 80% 30%, rgba(0, 245, 160, 0.25) 0%, transparent 45%),
+              radial-gradient(circle at 50% 80%, rgba(255, 42, 133, 0.22) 0%, transparent 45%),
+              radial-gradient(circle at 10% 85%, rgba(0, 210, 255, 0.22) 0%, transparent 40%),
+              #070a14;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
+  animation: maxUltraAuroraWave 10s ease-in-out infinite;
+}
+
+/* 2. Donanım Katmanında Hareketli Ambiyans Küreleri */
 [data-graphics="max-ultra"] .fixed.inset-0.pointer-events-none {
-  opacity: 1 !important;
-  filter: saturate(220%) !important;
+  opacity: 0.95 !important;
+  contain: strict;
+  transform: translate3d(0, 0, 0);
+}
+
+[data-graphics="max-ultra"] .fixed.inset-0.pointer-events-none > div {
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
 }
 
 [data-graphics="max-ultra"] .fixed.inset-0.pointer-events-none > div:nth-child(1) {
-  opacity: 0.9 !important;
-  background: radial-gradient(circle, #00f5a0 0%, #00d2ff 55%, transparent 75%) !important;
-  filter: blur(90px) !important;
-  animation: orbFloat1 6.5s ease-in-out infinite !important;
+  opacity: 0.85 !important;
+  background: radial-gradient(circle, rgba(0, 245, 160, 0.6) 0%, rgba(0, 210, 255, 0.4) 50%, transparent 70%) !important;
+  filter: blur(60px) !important;
+  animation: orbFloat1 7s ease-in-out infinite !important;
 }
 
 [data-graphics="max-ultra"] .fixed.inset-0.pointer-events-none > div:nth-child(2) {
-  opacity: 0.9 !important;
-  background: radial-gradient(circle, #8b5cf6 0%, #ff2a85 55%, transparent 75%) !important;
-  filter: blur(90px) !important;
-  animation: orbFloat2 7.5s ease-in-out infinite !important;
+  opacity: 0.85 !important;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.6) 0%, rgba(255, 42, 133, 0.4) 50%, transparent 70%) !important;
+  filter: blur(60px) !important;
+  animation: orbFloat2 8s ease-in-out infinite !important;
 }
 
 [data-graphics="max-ultra"] .fixed.inset-0.pointer-events-none > div:nth-child(3) {
-  opacity: 0.85 !important;
-  background: radial-gradient(circle, #f59e0b 0%, #ff2a85 55%, transparent 75%) !important;
-  filter: blur(90px) !important;
-  animation: orbFloat3 8.5s ease-in-out infinite !important;
+  opacity: 0.8 !important;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.6) 0%, rgba(255, 42, 133, 0.4) 50%, transparent 70%) !important;
+  filter: blur(60px) !important;
+  animation: orbFloat3 9s ease-in-out infinite !important;
 }
 
-/* 3. Kristal Cam ve Rengarenk Animasyonlu Paneller */
+/* 3. Hafifletilmiş Kristal Cam & Rengarenk Çerçeveler */
 [data-graphics="max-ultra"] .backdrop-blur-xl,
 [data-graphics="max-ultra"] .backdrop-blur-2xl,
 [data-graphics="max-ultra"] .backdrop-blur-md,
 [data-graphics="max-ultra"] .backdrop-blur-lg,
 [data-graphics="max-ultra"] header {
-  backdrop-filter: blur(28px) saturate(220%) !important;
-  -webkit-backdrop-filter: blur(28px) saturate(220%) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  background-color: rgba(13, 18, 32, 0.85) !important;
 }
 
 [data-graphics="max-ultra"] main section > div,
@@ -659,158 +671,94 @@ body[data-graphics="max-ultra"] {
 [data-graphics="max-ultra"] #settingsModal > div,
 [data-graphics="max-ultra"] #loginModal > div,
 [data-graphics="max-ultra"] #incomingInviteModal > div {
-  animation: rainbowBorderPulse 5s ease infinite !important;
+  animation: rainbowBorderPulse 6s linear infinite !important;
+  will-change: box-shadow, border-color;
+  transform: translate3d(0, 0, 0);
+  background-color: rgba(15, 23, 42, 0.9) !important;
 }
 
-/* 4. TÜM TUŞLAR VE BUTONLAR RENGARENK VE ANİMASYONLU! */
-
-/* Ana Büyük Başlat/Durdur Butonu */
+/* 4. TÜM BUTONLAR VE KONTROLLER */
 [data-graphics="max-ultra"] .big-btn {
-  background: linear-gradient(135deg, #10b981, #00d2ff, #8b5cf6, #ff2a85, #f59e0b, #10b981) !important;
-  background-size: 400% 400% !important;
-  animation: btnRainbowFlow 4s ease infinite !important;
-  border: 2px solid rgba(255, 255, 255, 0.8) !important;
+  background: linear-gradient(135deg, #10b981 0%, #00d2ff 35%, #8b5cf6 70%, #ff2a85 100%) !important;
+  animation: btnRainbowFlow 4.5s linear infinite !important;
+  border: 2px solid rgba(255, 255, 255, 0.85) !important;
   color: #ffffff !important;
-  text-shadow: 0 0 10px rgba(0,0,0,0.8), 0 0 20px rgba(0,245,160,0.8) !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8), 0 0 12px rgba(0,245,160,0.8) !important;
+  will-change: transform, box-shadow;
+  transform: translate3d(0, 0, 0);
 }
 
 [data-graphics="max-ultra"] .big-btn.running {
-  background: linear-gradient(135deg, #ef4444, #ff2a85, #f59e0b, #ef4444) !important;
-  background-size: 300% 300% !important;
+  background: linear-gradient(135deg, #ef4444 0%, #ff2a85 50%, #f59e0b 100%) !important;
   animation: pulseStopMaxUltra 1s infinite alternate !important;
   border: 2px solid rgba(255, 255, 255, 0.9) !important;
 }
 
-/* Üst Menü Butonları (Liderlik, Botla Yarış, Profil, Ayarlar, Ses, Tam Ekran, Dil) */
 [data-graphics="max-ultra"] #openLeaderboardBtn,
 [data-graphics="max-ultra"] #openBotModalBtn,
 [data-graphics="max-ultra"] #openVsModalBtn,
 [data-graphics="max-ultra"] #headerBotBtn {
   background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(139, 92, 246, 0.3), rgba(0, 245, 160, 0.25)) !important;
-  background-size: 300% 300% !important;
-  animation: btnRainbowFlow 5s ease infinite !important;
+  animation: btnRainbowFlow 5s linear infinite !important;
   border: 2px solid transparent !important;
+  will-change: transform, box-shadow;
 }
 
 [data-graphics="max-ultra"] #userProfileBtn,
 [data-graphics="max-ultra"] #settingsBtn,
 [data-graphics="max-ultra"] #soundToggleBtn,
 [data-graphics="max-ultra"] #fullscreenBtn,
-[data-graphics="max-ultra"] #langToggleBtn {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 27, 75, 0.85)) !important;
-  animation: btnSecondaryRainbow 4s ease infinite !important;
-  border: 1.5px solid rgba(139, 92, 246, 0.5) !important;
-}
-
-[data-graphics="max-ultra"] #userProfileBtn:hover,
-[data-graphics="max-ultra"] #settingsBtn:hover,
-[data-graphics="max-ultra"] #soundToggleBtn:hover,
-[data-graphics="max-ultra"] #fullscreenBtn:hover,
-[data-graphics="max-ultra"] #langToggleBtn:hover {
-  transform: scale(1.08) !important;
-  box-shadow: 0 0 25px rgba(0, 245, 160, 0.6) !important;
-}
-
-/* Tur Ekle ve Sıfırla Tuşları */
+[data-graphics="max-ultra"] #langToggleBtn,
 [data-graphics="max-ultra"] #lapBtn,
 [data-graphics="max-ultra"] #resetBtn,
 [data-graphics="max-ultra"] #timerResetBtn,
-[data-graphics="max-ultra"] #clearHistoryBtn {
-  animation: btnSecondaryRainbow 4s ease infinite !important;
-  border: 1.5px solid rgba(0, 210, 255, 0.6) !important;
-}
-
-[data-graphics="max-ultra"] #lapBtn:not(:disabled):hover,
-[data-graphics="max-ultra"] #resetBtn:hover,
-[data-graphics="max-ultra"] #timerResetBtn:hover {
-  transform: scale(1.05) !important;
-  box-shadow: 0 0 25px rgba(0, 210, 255, 0.6) !important;
-}
-
-/* Navigasyon Tab Butonları (Kronometre, Zamanlayıcı, Saat) */
-[data-graphics="max-ultra"] .nav-tab {
-  transition: all 0.3s ease !important;
+[data-graphics="max-ultra"] #clearHistoryBtn,
+[data-graphics="max-ultra"] .timer-preset-btn,
+[data-graphics="max-ultra"] #modeCardsGrid > button,
+[data-graphics="max-ultra"] .bot-diff-btn,
+[data-graphics="max-ultra"] #declineInviteBtn,
+[data-graphics="max-ultra"] #arenaExitBtn {
+  animation: btnSecondaryRainbow 4.5s linear infinite !important;
+  border: 1.5px solid rgba(139, 92, 246, 0.6) !important;
+  will-change: transform, box-shadow;
 }
 
 [data-graphics="max-ultra"] .nav-tab.active {
   background: linear-gradient(135deg, rgba(0, 245, 160, 0.3), rgba(139, 92, 246, 0.35)) !important;
-  animation: btnSecondaryRainbow 3s ease infinite !important;
+  animation: btnSecondaryRainbow 3.5s linear infinite !important;
   border: 2px solid #00f5a0 !important;
-  box-shadow: 0 0 25px rgba(0, 245, 160, 0.5) !important;
-  text-shadow: 0 0 10px #00f5a0 !important;
+  box-shadow: 0 0 20px rgba(0, 245, 160, 0.45) !important;
 }
 
-/* Hedef Birim Seçici Tuşları (Saniye, Milisaniye, Saat) */
 [data-graphics="max-ultra"] .unit-btn.active {
   background: linear-gradient(135deg, #10b981, #00d2ff) !important;
-  animation: btnRainbowFlow 3s ease infinite !important;
+  animation: btnRainbowFlow 3.5s linear infinite !important;
   border: 1.5px solid #ffffff !important;
-  box-shadow: 0 0 20px rgba(0, 245, 160, 0.7) !important;
 }
 
-/* Zamanlayıcı Başlat Tuşu ve Hazır Süre Tuşları */
-[data-graphics="max-ultra"] #timerToggleBtn {
-  background: linear-gradient(135deg, #00d2ff, #8b5cf6, #ff2a85, #00d2ff) !important;
-  background-size: 300% 300% !important;
-  animation: btnRainbowFlow 3.5s ease infinite !important;
-  border: 2px solid rgba(255, 255, 255, 0.8) !important;
-  color: #ffffff !important;
-  text-shadow: 0 0 10px rgba(0,0,0,0.8), 0 0 20px rgba(0,210,255,0.8) !important;
-}
-
-[data-graphics="max-ultra"] .timer-preset-btn {
-  animation: btnSecondaryRainbow 4s ease infinite !important;
-  border: 1.5px solid rgba(0, 210, 255, 0.4) !important;
-}
-
-[data-graphics="max-ultra"] .timer-preset-btn:hover {
-  transform: scale(1.08) !important;
-  box-shadow: 0 0 20px rgba(0, 210, 255, 0.6) !important;
-}
-
-/* Mod Seçim Kartları ve Bot Zorluk Butonları */
-[data-graphics="max-ultra"] #modeCardsGrid > button,
-[data-graphics="max-ultra"] .bot-diff-btn {
-  animation: btnSecondaryRainbow 5s ease infinite !important;
-  border: 2px solid rgba(139, 92, 246, 0.6) !important;
-  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
-}
-
-[data-graphics="max-ultra"] #modeCardsGrid > button:hover,
-[data-graphics="max-ultra"] .bot-diff-btn:hover {
-  transform: scale(1.04) translateY(-2px) !important;
-  box-shadow: 0 0 35px rgba(255, 42, 133, 0.6), 0 0 60px rgba(0, 245, 160, 0.3) !important;
-  border-color: #ff2a85 !important;
-}
-
-/* VS Arena ve Karşılaşma Butonları (Tahmini Gönder, Pasla, Kabul Et, Reddet, vb.) */
+[data-graphics="max-ultra"] #timerToggleBtn,
 [data-graphics="max-ultra"] #arenaActionBtn,
 [data-graphics="max-ultra"] #guessSubmitBtn,
 [data-graphics="max-ultra"] #acceptInviteBtn,
 [data-graphics="max-ultra"] #arenaRematchBtn {
-  background: linear-gradient(135deg, #10b981, #00d2ff, #8b5cf6, #ff2a85, #10b981) !important;
-  background-size: 300% 300% !important;
-  animation: btnRainbowFlow 3.5s ease infinite !important;
+  background: linear-gradient(135deg, #10b981 0%, #00d2ff 35%, #8b5cf6 70%, #ff2a85 100%) !important;
+  animation: btnRainbowFlow 4s linear infinite !important;
   border: 2px solid rgba(255, 255, 255, 0.85) !important;
   color: #ffffff !important;
-  text-shadow: 0 0 10px rgba(0,0,0,0.8), 0 0 20px rgba(0,245,160,0.8) !important;
+  will-change: transform, box-shadow;
+  transform: translate3d(0, 0, 0);
 }
 
-[data-graphics="max-ultra"] #declineInviteBtn,
-[data-graphics="max-ultra"] #arenaExitBtn {
-  animation: btnSecondaryRainbow 4s ease infinite !important;
-}
-
-/* 5. GİRİŞ KUTULARI (INPUTS) RENGARENK LAZER ODAKLANMA */
+/* 5. GİRİŞ KUTULARI (INPUTS) */
 [data-graphics="max-ultra"] input[type="number"],
 [data-graphics="max-ultra"] input[type="text"] {
-  animation: inputRgbPulse 4s ease infinite !important;
+  animation: inputRgbPulse 4s linear infinite !important;
   background: rgba(15, 23, 42, 0.95) !important;
   color: #ffffff !important;
-  text-shadow: 0 0 10px #00f5a0 !important;
+  will-change: box-shadow, border-color;
 }
 
-/* 6. SAYAÇ VE KRONOMETRE RAKAMLARI */
+/* 6. SAYAÇ RAKAMLARI */
 [data-graphics="max-ultra"] .glow-text,
 [data-graphics="max-ultra"] #swPart1,
 [data-graphics="max-ultra"] #swPart2,
@@ -821,83 +769,37 @@ body[data-graphics="max-ultra"] {
 [data-graphics="max-ultra"] #clockHours,
 [data-graphics="max-ultra"] #clockMinutes,
 [data-graphics="max-ultra"] #clockSeconds {
-  animation: rgbLaserGlow 3.5s ease-in-out infinite !important;
+  animation: rgbLaserGlow 4s linear infinite !important;
+  will-change: text-shadow;
+  transform: translate3d(0, 0, 0);
 }
 
 /* 7. DÖNEN CONIC RADYAL ENERJİ AURASI */
 [data-graphics="max-ultra"] #chronoGlow {
   display: block !important;
-  width: 28rem !important;
-  height: 28rem !important;
-  opacity: 0.9 !important;
+  width: 26rem !important;
+  height: 26rem !important;
+  opacity: 0.85 !important;
   background: conic-gradient(from 0deg, #00f5a0, #00d2ff, #8b5cf6, #ff2a85, #f59e0b, #00f5a0) !important;
-  animation: chronoGlowSpin 6.5s linear infinite !important;
+  filter: blur(65px) !important;
+  animation: chronoGlowSpin 7s linear infinite !important;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
 }
 
-/* 8. İKONLAR VE ROZETLER SÜREKLİ HAREKETLİ CANLI */
+/* 8. İKONLAR VE BAŞLIKLAR */
 [data-graphics="max-ultra"] header i[data-lucide],
-[data-graphics="max-ultra"] .animate-bounce,
-[data-graphics="max-ultra"] span.text-3xl,
-[data-graphics="max-ultra"] span.text-4xl {
-  animation: iconBobble 3s ease-in-out infinite !important;
+[data-graphics="max-ultra"] .animate-bounce {
+  animation: iconBobble 3.5s ease-in-out infinite !important;
+  will-change: transform;
 }
 
-/* 9. BAŞLIK VE METİNLERDE GÖKKUŞAĞI RENK GEÇİŞİ */
 [data-graphics="max-ultra"] h1,
 [data-graphics="max-ultra"] .glow-brand {
-  animation: rainbowShiftText 4.5s linear infinite !important;
+  animation: rainbowShiftColors 5s linear infinite !important;
+  will-change: color, text-shadow;
 }
 
 [data-graphics="max-ultra"] [data-cp-player]:first-child {
-  animation: rainbowBorderPulse 2.5s ease infinite !important;
-}
-
-
-/* ==========================================================================
-   SETTINGS MODAL MOBILE & RESPONSIVE PERFECTION
-   ========================================================================== */
-#settingsModal {
-  padding: 0.75rem;
-}
-
-#settingsModal > div {
-  max-height: 92vh;
-  display: flex;
-  flex-direction: column;
-}
-
-#graphicsPresetsContainer {
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
-}
-
-@media (max-height: 700px) {
-  #settingsModal > div {
-    max-height: 96vh;
-    padding: 0.85rem !important;
-  }
-  #graphicsPresetsContainer {
-    max-height: 60vh !important;
-    gap: 0.4rem !important;
-  }
-  .graphics-preset-btn {
-    padding: 0.55rem 0.75rem !important;
-  }
-  .graphics-preset-btn p {
-    display: none;
-  }
-}
-
-@media (max-width: 480px) {
-  #settingsModal {
-    padding: 0.5rem;
-  }
-  #settingsModal > div {
-    padding: 0.9rem !important;
-    border-radius: 1.25rem !important;
-  }
-  .graphics-preset-btn {
-    padding: 0.65rem 0.85rem !important;
-  }
+  animation: rainbowBorderPulse 3s linear infinite !important;
 }
