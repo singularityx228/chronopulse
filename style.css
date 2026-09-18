@@ -851,3 +851,53 @@ body[data-graphics="max-ultra"] {
 [data-graphics="max-ultra"] [data-cp-player]:first-child {
   animation: rainbowBorderPulse 2.5s ease infinite !important;
 }
+
+
+/* ==========================================================================
+   SETTINGS MODAL MOBILE & RESPONSIVE PERFECTION
+   ========================================================================== */
+#settingsModal {
+  padding: 0.75rem;
+}
+
+#settingsModal > div {
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#graphicsPresetsContainer {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+@media (max-height: 700px) {
+  #settingsModal > div {
+    max-height: 96vh;
+    padding: 0.85rem !important;
+  }
+  #graphicsPresetsContainer {
+    max-height: 60vh !important;
+    gap: 0.4rem !important;
+  }
+  .graphics-preset-btn {
+    padding: 0.55rem 0.75rem !important;
+  }
+  .graphics-preset-btn p {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  #settingsModal {
+    padding: 0.5rem;
+  }
+  #settingsModal > div {
+    padding: 0.9rem !important;
+    border-radius: 1.25rem !important;
+  }
+  .graphics-preset-btn {
+    padding: 0.65rem 0.85rem !important;
+  }
+}
