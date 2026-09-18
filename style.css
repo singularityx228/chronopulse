@@ -435,3 +435,89 @@
   contain: content;
   transform: translateZ(0);
 }
+
+/* 5. MAX ULTRA (Sinematik Overdrive - Tüm Efektler Ful!) */
+[data-graphics="max-ultra"] .fixed.inset-0.pointer-events-none {
+  opacity: 2.2 !important;
+  filter: blur(140px) saturate(220%) !important;
+}
+
+[data-graphics="max-ultra"] .backdrop-blur-xl,
+[data-graphics="max-ultra"] .backdrop-blur-2xl,
+[data-graphics="max-ultra"] .backdrop-blur-md,
+[data-graphics="max-ultra"] .backdrop-blur-lg,
+[data-graphics="max-ultra"] header,
+[data-graphics="max-ultra"] #leaderboardModal > div,
+[data-graphics="max-ultra"] #vsArenaModal > div,
+[data-graphics="max-ultra"] #modeSelectModal > div,
+[data-graphics="max-ultra"] #settingsModal > div {
+  backdrop-filter: blur(32px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(200%) !important;
+}
+
+[data-graphics="max-ultra"] .glow-text,
+[data-graphics="max-ultra"] #swPart1,
+[data-graphics="max-ultra"] #swPart2,
+[data-graphics="max-ultra"] #swPart3,
+[data-graphics="max-ultra"] #arenaP1Time,
+[data-graphics="max-ultra"] #arenaP2Time,
+[data-graphics="max-ultra"] #timerDigits,
+[data-graphics="max-ultra"] #clockHours,
+[data-graphics="max-ultra"] #clockMinutes,
+[data-graphics="max-ultra"] #clockSeconds {
+  text-shadow: 
+    0 0 10px rgba(0, 245, 160, 0.95),
+    0 0 25px rgba(0, 245, 160, 0.8),
+    0 0 50px rgba(0, 210, 255, 0.65),
+    0 0 90px rgba(139, 92, 246, 0.5),
+    0 0 140px rgba(255, 42, 133, 0.4) !important;
+}
+
+[data-graphics="max-ultra"] #chronoGlow {
+  background: radial-gradient(circle, rgba(0, 245, 160, 0.35) 0%, rgba(0, 210, 255, 0.2) 45%, rgba(139, 92, 246, 0.1) 80%) !important;
+  filter: blur(80px) !important;
+  width: 24rem !important;
+  height: 24rem !important;
+  opacity: 1 !important;
+}
+
+[data-graphics="max-ultra"] .big-btn {
+  box-shadow: 
+    0 15px 40px -5px rgba(16, 185, 129, 0.7),
+    0 0 35px rgba(0, 245, 160, 0.6),
+    0 0 70px rgba(0, 210, 255, 0.4),
+    inset 0 2px 8px rgba(255, 255, 255, 0.7) !important;
+}
+
+[data-graphics="max-ultra"] .big-btn.running {
+  box-shadow: 
+    0 15px 50px -5px rgba(239, 68, 68, 0.9),
+    0 0 45px rgba(239, 68, 68, 0.8),
+    0 0 90px rgba(255, 42, 133, 0.6),
+    inset 0 2px 8px rgba(255, 255, 255, 0.7) !important;
+  animation: pulseStopMaxUltra 1.2s infinite alternate !important;
+}
+
+@keyframes pulseStopMaxUltra {
+  0% { transform: scale(1); filter: brightness(1); }
+  100% { transform: scale(1.03); filter: brightness(1.25); box-shadow: 0 15px 65px -5px rgba(239, 68, 68, 1), 0 0 60px rgba(255, 42, 133, 0.9); }
+}
+
+[data-graphics="max-ultra"] #leaderboardModal > div,
+[data-graphics="max-ultra"] #vsArenaModal > div,
+[data-graphics="max-ultra"] #settingsModal > div,
+[data-graphics="max-ultra"] #modeSelectModal > div {
+  box-shadow: 
+    0 0 50px rgba(0, 0, 0, 0.9),
+    0 0 35px rgba(139, 92, 246, 0.35),
+    0 0 70px rgba(0, 245, 160, 0.2) !important;
+}
+
+[data-graphics="max-ultra"] [data-cp-player]:first-child {
+  box-shadow: 
+    0 0 25px rgba(245, 158, 11, 0.5),
+    0 0 50px rgba(234, 179, 8, 0.25),
+    inset 0 0 15px rgba(245, 158, 11, 0.2) !important;
+  border-color: #fbbf24 !important;
+}
+
