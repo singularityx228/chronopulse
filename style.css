@@ -297,6 +297,45 @@
   color: #ffffff !important;
 }
 
+
+[data-graphics="max-low"] #msArenaOverlay,
+[data-graphics="max-low"] #msArenaOverlay > div,
+[data-graphics="max-low"] #arenaWinnerBanner,
+[data-graphics="max-low"] #msResult,
+[data-graphics="max-low"] #msStage > div,
+[data-graphics="max-low"] #msRobotZone,
+[data-graphics="max-low"] #guessRadarEffect,
+[data-graphics="max-low"] #overstepSuspenseBox,
+[data-graphics="max-low"] #overstepOpponentLiveBox {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+[data-graphics="max-low"] #guessMysteryDisplay,
+[data-graphics="max-low"] #overstepMysteryDisplay,
+[data-graphics="max-low"] #msMystery,
+[data-graphics="max-low"] #arenaTargetLabel,
+[data-graphics="max-low"] #overstepTargetLimitLabel {
+  text-shadow: none !important;
+  filter: none !important;
+  animation: none !important;
+}
+
+[data-graphics="max-low"] #arenaActionBtn,
+[data-graphics="max-low"] #overstepActionBtn,
+[data-graphics="max-low"] #msPrepStartBtn,
+[data-graphics="max-low"] #msStopBtn,
+[data-graphics="max-low"] #guessSubmitBtn,
+[data-graphics="max-low"] #arenaRematchBtn,
+[data-graphics="max-low"] #msAgainBtn,
+[data-graphics="max-low"] #arenaExitBtn,
+[data-graphics="max-low"] #msExitBtn {
+  box-shadow: none !important;
+  animation: none !important;
+}
+
 /* 1. ULTRA DÜŞÜK (Potato Mode - Maksimum 120+ FPS) */
 [data-graphics="ultra-low"] .fixed.inset-0.pointer-events-none,
 [data-graphics="ultra-low"] #chronoGlow,
@@ -803,3 +842,97 @@ body[data-graphics="max-ultra"]::before {
 [data-graphics="max-ultra"] [data-cp-player]:first-child {
   animation: rainbowBorderPulse 3s linear infinite !important;
 }
+
+
+/* 9. 1v1 & BOT VS ARENASI / MOD SEÇİMİ MAX ULTRA EFEKTLERİ */
+[data-graphics="max-ultra"] #msArenaOverlay > div,
+[data-graphics="max-ultra"] #arenaWinnerBanner,
+[data-graphics="max-ultra"] #msResult {
+  animation: rainbowBorderPulse 5s linear infinite !important;
+  will-change: box-shadow, border-color;
+  transform: translate3d(0, 0, 0);
+  background: rgba(15, 23, 42, 0.95) !important;
+}
+
+[data-graphics="max-ultra"] #modeCardsGrid > button {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95)) !important;
+  border: 2px solid rgba(139, 92, 246, 0.5) !important;
+  animation: btnSecondaryRainbow 4s linear infinite !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(139, 92, 246, 0.15) !important;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease !important;
+}
+
+[data-graphics="max-ultra"] #modeCardsGrid > button:hover {
+  transform: translateY(-3px) scale(1.02) translate3d(0, 0, 0) !important;
+  box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4), inset 0 0 20px rgba(0, 245, 160, 0.25) !important;
+}
+
+[data-graphics="max-ultra"] .bot-diff-btn.active,
+[data-graphics="max-ultra"] .bot-diff-btn[style*="background"] {
+  animation: btnRainbowFlow 3.5s linear infinite !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
+  color: #ffffff !important;
+}
+
+[data-graphics="max-ultra"] #guessMysteryDisplay,
+[data-graphics="max-ultra"] #overstepMysteryDisplay,
+[data-graphics="max-ultra"] #msMystery,
+[data-graphics="max-ultra"] #arenaCountdownNumber,
+[data-graphics="max-ultra"] #prepCountdownNumber,
+[data-graphics="max-ultra"] #msCountdownNumber,
+[data-graphics="max-ultra"] #overstepSuspenseNumber {
+  animation: rgbLaserGlow 3s linear infinite !important;
+  will-change: text-shadow;
+  transform: translate3d(0, 0, 0);
+}
+
+[data-graphics="max-ultra"] #arenaActionBtn,
+[data-graphics="max-ultra"] #overstepActionBtn:not(:disabled),
+[data-graphics="max-ultra"] #msPrepStartBtn,
+[data-graphics="max-ultra"] #msStopBtn,
+[data-graphics="max-ultra"] #msAgainBtn,
+[data-graphics="max-ultra"] #guessSubmitBtn,
+[data-graphics="max-ultra"] #arenaRematchBtn {
+  background: linear-gradient(135deg, #10b981 0%, #00d2ff 35%, #8b5cf6 70%, #ff2a85 100%) !important;
+  animation: btnRainbowFlow 3.8s linear infinite !important;
+  border: 2px solid rgba(255, 255, 255, 0.9) !important;
+  color: #ffffff !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8), 0 0 14px rgba(0, 245, 160, 0.85) !important;
+  will-change: transform, box-shadow;
+  transform: translate3d(0, 0, 0);
+}
+
+[data-graphics="max-ultra"] #robotPhysicalBtn,
+[data-graphics="max-ultra"] #msRobotBtn {
+  box-shadow: 0 0 25px rgba(239, 68, 68, 0.8), 0 0 45px rgba(255, 42, 133, 0.6), inset 0 0 15px rgba(255, 255, 255, 0.4) !important;
+  animation: pulseStopMaxUltra 1.2s infinite alternate !important;
+}
+
+[data-graphics="max-ultra"] #overstepOpponentLiveBox,
+[data-graphics="max-ultra"] #overstepLogBox,
+[data-graphics="max-ultra"] #guessInputBox,
+[data-graphics="max-ultra"] #msRobotZone {
+  animation: btnSecondaryRainbow 4.5s linear infinite !important;
+  border: 2px solid rgba(139, 92, 246, 0.6) !important;
+}
+
+[data-graphics="max-ultra"] #arenaP1Accuracy,
+[data-graphics="max-ultra"] #arenaP2Accuracy,
+[data-graphics="max-ultra"] #msRealVal,
+[data-graphics="max-ultra"] #msYouVal,
+[data-graphics="max-ultra"] #msOppVal {
+  animation: rgbLaserGlow 3.5s linear infinite !important;
+}
+
+[data-graphics="max-ultra"] #arenaActiveModeBadge,
+[data-graphics="max-ultra"] #arenaBotDiffBadge,
+[data-graphics="max-ultra"] #msModeBadge,
+[data-graphics="max-ultra"] #msDiffBadge,
+[data-graphics="max-ultra"] #overstepP1Badge,
+[data-graphics="max-ultra"] #overstepP2Badge {
+  animation: btnSecondaryRainbow 3.5s linear infinite !important;
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.35) !important;
+}
+
