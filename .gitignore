@@ -1,6 +1,4 @@
 node_modules/
 package.json
 package-lock.json
-*.src.js
-*.src.html
 obfuscate_build.js
