@@ -2,3 +2,4 @@ node_modules/
 package.json
 package-lock.json
 obfuscate_build.js
+*.bak*
