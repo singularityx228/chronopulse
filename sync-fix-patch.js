@@ -1,5 +1,5 @@
 /* ============================================================================
-   TimerX / ChronoPulse - Online Sync Fix Patch  (v1.0.0)
+   TimerX / ChronoPulse - Online Sync Fix Patch  (v1.1.0)
    ----------------------------------------------------------------------------
    Loads AFTER app.js, leaderboard-patch.js and matchsecond-patch.js.
    To revert: delete the <script src="sync-fix-patch.js..."> line in index.html.
@@ -28,7 +28,13 @@
       forwarded from the port-443 ntfy channel.
    8) Presence list no longer flickers: players stay visible ~75 s after their
       last ping, and a new player gets everybody's answer within ~3 s.
+   9) v1.1.0: long-poll fallback when WebSocket/SSE are silent (proxies that
+      buffer streams), optional second relay (ntfy-compatible server on your
+      own domain) used in parallel with ntfy.sh, and a self test.
    Debug: open the site with #syncdebug at the end of the address.
+   Self test (school / firewall machines): open the site with #netcheck.
+   Optional relay: set RELAY_BASE below, or test with #relay=https://host
+   (#relay=off removes it).
    ========================================================================== */
 (function () {
   'use strict';
@@ -46,7 +52,26 @@
   var POLL_CACHE_MS = 20000;
   var PRESENCE_GRACE_EXTRA = 67000; /* app.js prunes at lastSeen + 8000 */
 
+  var RELAY_BASE = ''; /* e.g. 'https://relay.example.com' (ntfy-compatible server) */
+  function cfgRelay() {
+    var b = RELAY_BASE;
+    try {
+      var m = /[#&]relay=([^&]+)/.exec(String(location.hash || ''));
+      if (m) {
+        var v = decodeURIComponent(m[1]);
+        if (v === 'off') { localStorage.removeItem('cp_relay_base'); b = ''; }
+        else { localStorage.setItem('cp_relay_base', v); b = v; }
+      } else if (!b) {
+        b = localStorage.getItem('cp_relay_base') || '';
+      }
+    } catch (e) {}
+    b = String(b || '').replace(/\/+$/, '');
+    return /^https:\/\/[^\s]+$/.test(b) ? b : '';
+  }
+  var RELAY = cfgRelay();
+
   var stats = {
+    relayPosts: 0, relayFail: 0, lpPolls: 0, lpMsgs: 0, relayMsgs: 0,
     posts: 0, dropped: 0, retried: 0, failed: 0, lastStatus: 0,
     reconnects: 0, reconciles: 0, published: 0, cloudRecs: 0, lastError: ''
   };
@@ -172,6 +197,7 @@
       var msg = null;
       try { msg = JSON.parse(body); } catch (e) {}
       var type = msg && msg.type;
+      if (bytes(body) <= MAX_BODY_BYTES) relayPost(topic, body);
 
       if (type === 'PING_PRESENCE') {
         if (msg.force) {
@@ -275,27 +301,38 @@
     if (cur.length) chunks.push(cur);
     return chunks.map(function (c) { return JSON.stringify({ v: 1, records: c }); });
   }
-  function publishChunks(recs) {
+  function publishChunks(recs, baseUrl) {
+    var url = baseUrl || LB_URL;
     var bodies = chunkRecords(recs);
     stats.published += recs.length;
     var p = Promise.resolve();
     bodies.forEach(function (b) {
-      p = p.then(function () { return sendPost(LB_URL, b, 'bg').catch(function () {}); })
+      p = p.then(function () { return sendPost(url, b, 'bg').catch(function () {}); })
            .then(function () { return delay(1300); });
     });
     return p;
   }
-  function cloudRead() {
-    var url = LB_URL + '/json?poll=1&since=all';
+  /* read one base: resolves recs[] or rejects */
+  function readOne(topicUrl) {
+    var url = topicUrl + '/json?poll=1&since=all';
     return origFetch(url).then(function (res) {
       if (!res.ok) { stats.lastStatus = res.status; throw new Error('lb ' + res.status); }
       return res.text();
     }).then(function (t) {
-      pollCache[url] = { t: Date.now(), text: t, inflight: null };
-      var recs = parseNdjson(t);
-      stats.cloudRecs = recs.length;
-      return recs;
+      if (topicUrl === LB_URL) pollCache[url] = { t: Date.now(), text: t, inflight: null };
+      return parseNdjson(t);
     });
+  }
+  /* reads ntfy.sh (and the relay, if any); a failing base gives recs:null */
+  function readBases() {
+    var bases = [{ name: 'ntfy', url: LB_URL }];
+    if (RELAY) bases.push({ name: 'relay', url: RELAY + '/' + LB_TOPIC });
+    return Promise.all(bases.map(function (b) {
+      return readOne(b.url).then(
+        function (recs) { return { name: b.name, url: b.url, recs: recs }; },
+        function (e) { stats.lastError = String(e && e.message || e); return { name: b.name, url: b.url, recs: null }; }
+      );
+    }));
   }
 
   /* keep app.js `let timiLeaderboardRecords` and window.timiLeaderboardRecords equal */
@@ -330,34 +367,52 @@
       try { window.mergeLeaderboardRecords(recs); } catch (e) {}
     }
   }
-  function missingIn(cloudKeys) {
+  function unionOf(results) {
+    var all = [];
+    results.forEach(function (r) { if (r.recs) all = all.concat(r.recs); });
+    return all;
+  }
+  function missingFor(baseName, keys) {
     var now = Date.now(), local = localRecords(), out = [];
     for (var i = 0; i < local.length; i++) {
       var k = recKey(local[i]);
-      if (k && !cloudKeys[k] && !(recentPub[k] && now - recentPub[k] < 120000)) out.push(local[i]);
+      var pk = baseName + '|' + k;
+      if (k && !keys[k] && !(recentPub[pk] && now - recentPub[pk] < 120000)) out.push(local[i]);
     }
     return out;
+  }
+  function publishMissing(results) {
+    var jobs = [];
+    results.forEach(function (r) {
+      if (!r.recs) return;
+      var still = missingFor(r.name, keySet(r.recs));
+      if (!still.length) return;
+      var now = Date.now();
+      still.forEach(function (x) { recentPub[r.name + '|' + recKey(x)] = now; });
+      jobs.push(publishChunks(still, r.url));
+    });
+    return Promise.all(jobs);
   }
   function reconcile(reason) {
     if (rcBusy) { rcAgain = true; return; }
     rcBusy = true;
     stats.reconciles++;
     try { syncLexical(); } catch (e) {}
-    cloudRead().then(function (cloud) {
-      mergeCloud(cloud);
+    readBases().then(function (res) {
+      var ok = res.filter(function (r) { return r.recs; });
+      if (!ok.length) throw new Error('no cloud base reachable');
+      var all = unionOf(res);
+      stats.cloudRecs = all.length;
+      mergeCloud(all);
       try { syncLexical(); } catch (e) {}
-      var missing = missingIn(keySet(cloud));
-      if (!missing.length) return;
+      var needs = res.some(function (r) { return r.recs && missingFor(r.name, keySet(r.recs)).length; });
+      if (!needs) return;
       var jitter = reason === 'legacy-publish' ? 0 : Math.floor(Math.random() * 5000);
       return delay(jitter).then(function () {
-        return jitter ? cloudRead() : cloud;
-      }).then(function (cloud2) {
-        if (cloud2 !== cloud) mergeCloud(cloud2);
-        var still = missingIn(keySet(cloud2));
-        if (!still.length) return;
-        var now = Date.now();
-        still.forEach(function (r) { recentPub[recKey(r)] = now; });
-        return publishChunks(still);
+        return jitter ? readBases() : res;
+      }).then(function (res2) {
+        if (res2 !== res) mergeCloud(unionOf(res2));
+        return publishMissing(res2);
       });
     }).catch(function (e) {
       stats.lastError = String(e && e.message || e);
@@ -528,6 +583,7 @@
       var c = lex('mqttClient');
       if (c && c.connected) { if (!mqttSince) mqttSince = Date.now(); } else { mqttSince = 0; }
     } catch (e) {}
+    if (tick % 5 === 0) { try { watchStreams(); } catch (e) {} }
     /* 2s: keep both leaderboard lists identical */
     if (tick % 2 === 0) {
       try {
@@ -559,6 +615,241 @@
     if (tick % 20 === 0) publishMqttRetained();
   }, 1000);
 
+  /* ====================================================== SECOND RELAY (opt.) */
+  function relayPost(topic, body) {
+    if (!RELAY || !origFetch) return;
+    var tries = 0;
+    (function go() {
+      stats.relayPosts++;
+      origFetch(RELAY + '/' + topic, {
+        method: 'POST', body: body, headers: { 'Content-Type': 'text/plain;charset=UTF-8' }
+      }).then(function (res) {
+        if (res && (res.status === 429 || res.status >= 500) && tries++ < 1) setTimeout(go, 1500);
+        else if (res && res.status >= 400) stats.relayFail++;
+      }, function () {
+        if (tries++ < 1) setTimeout(go, 1500); else stats.relayFail++;
+      });
+    })();
+  }
+
+  function dispatchGlobal(d) {
+    if (!d || typeof d !== 'object') return;
+    try {
+      if (typeof window.isDuplicateMessage === 'function' && window.isDuplicateMessage(d)) return;
+      if (typeof window.handleRealtimeMessage === 'function') window.handleRealtimeMessage(d);
+    } catch (e) {}
+  }
+  function handleItem(topic, item) {
+    if (!item || item.event !== 'message' || !item.message) return;
+    var d;
+    try { d = JSON.parse(item.message); } catch (e) { return; }
+    if (topic === LB_TOPIC) {
+      var out = [];
+      pushRecs(out, d);
+      if (out.length) mergeCloud(out);
+    } else {
+      dispatchGlobal(d);
+    }
+  }
+
+  var relayOpen = {};
+  function connectRelayStream(topic) {
+    var fails = 0;
+    function open() {
+      try {
+        if (typeof EventSource === 'undefined') return;
+        var es = new EventSource(RELAY + '/' + topic + '/sse');
+        es.onopen = function () { fails = 0; relayOpen[topic] = true; };
+        es.onmessage = function (e) {
+          stats.relayMsgs++;
+          try { handleItem(topic, JSON.parse(e.data)); } catch (x) {}
+        };
+        es.onerror = function () {
+          relayOpen[topic] = false;
+          if (es.readyState === 2) {
+            fails = Math.min(fails + 1, 6);
+            setTimeout(open, Math.min(60000, 3000 * Math.pow(2, fails)));
+          }
+        };
+      } catch (e) {}
+    }
+    open();
+  }
+  function startRelay() {
+    if (!RELAY) return;
+    connectRelayStream(GLOBAL_TOPIC);
+    connectRelayStream(LB_TOPIC);
+  }
+
+  /* ================================================= LONG-POLL FALLBACK ===
+     Used only while neither WebSocket nor SSE delivers anything (typical for
+     proxies that buffer streams). Slower (a few seconds) but it works through
+     any plain HTTPS path that lets ntfy.sh requests through. */
+  var wsLast = 0, esLast = 0, watchedEs = null, watchedWs2 = null, deadSince = 0, aliveSince = 0;
+  var lp = { active: false, timer: null, interval: 6000, since: {} };
+  function watchStreams() {
+    var now = Date.now();
+    var ws = lex('universalWs'), es = lex('universalEventSource');
+    if (ws && ws !== watchedWs2) {
+      watchedWs2 = ws; wsLast = now;
+      try { ws.addEventListener('message', function () { wsLast = Date.now(); }); } catch (e) {}
+    }
+    if (es && es !== watchedEs) {
+      watchedEs = es; esLast = now;
+      try {
+        es.addEventListener('open', function () { esLast = Date.now(); });
+        es.addEventListener('message', function () { esLast = Date.now(); });
+        es.addEventListener('keepalive', function () { esLast = Date.now(); });
+        es.addEventListener('open', function () { esLast = Date.now(); });
+      } catch (e) {}
+    }
+    var alive = (ws && ws.readyState === 1 && now - wsLast < 110000) ||
+                (es && es.readyState === 1 && now - esLast < 110000);
+    if (alive) {
+      deadSince = 0;
+      if (!aliveSince) aliveSince = now;
+      if (lp.active && now - aliveSince > 10000) stopLongPoll();
+    } else {
+      aliveSince = 0;
+      if (!deadSince) deadSince = now;
+      if (!lp.active && now - deadSince > 25000 && document.visibilityState === 'visible') startLongPoll();
+    }
+  }
+  function lpBases() {
+    var b = [{ key: 'ntfy', prefix: NTFY_PREFIX }];
+    if (RELAY && !(relayOpen[GLOBAL_TOPIC])) b.push({ key: 'relay', prefix: RELAY + '/' });
+    return b;
+  }
+  function startLongPoll() {
+    if (lp.active) return;
+    lp.active = true;
+    lp.interval = 6000;
+    lp.since = {};
+    lpTick();
+  }
+  function stopLongPoll() {
+    lp.active = false;
+    if (lp.timer) { clearTimeout(lp.timer); lp.timer = null; }
+  }
+  function lpPollOne(b) {
+    var since = lp.since[b.key] || '20s';
+    var url = b.prefix + GLOBAL_TOPIC + '/json?poll=1&since=' + encodeURIComponent(since);
+    stats.lpPolls++;
+    return origFetch(url).then(function (res) {
+      stats.lastStatus = res.status;
+      if (res.status === 429) { lp.interval = Math.min(30000, lp.interval * 2); return ''; }
+      if (!res.ok) throw new Error('lp ' + res.status);
+      return res.text();
+    }).then(function (text) {
+      var lines = String(text || '').split('\n');
+      for (var i = 0; i < lines.length; i++) {
+        var line = lines[i].trim();
+        if (!line) continue;
+        var ev;
+        try { ev = JSON.parse(line); } catch (e) { continue; }
+        if (ev && ev.id) lp.since[b.key] = ev.id;
+        if (ev && ev.event === 'message') { stats.lpMsgs++; handleItem(GLOBAL_TOPIC, ev); }
+      }
+    });
+  }
+  function lpTick() {
+    lp.timer = null;
+    if (!lp.active) return;
+    var jobs = lpBases().map(function (b) { return lpPollOne(b).catch(function () { lp.interval = Math.min(30000, Math.round(lp.interval * 1.5)); }); });
+    Promise.all(jobs).then(function () {
+      if (lp.active) lp.timer = setTimeout(lpTick, lp.interval);
+    });
+  }
+
+  /* ================================================== SELF TEST (#netcheck) */
+  function testStream(base, kind) {
+    return new Promise(function (resolve) {
+      var topic = 'cp_netcheck_' + Math.random().toString(36).slice(2, 10);
+      var host = base.replace(/^https:\/\//, '');
+      var url = kind === 'ws' ? 'wss://' + host + '/' + topic + '/ws' : base + '/' + topic + '/sse';
+      var done = false, opened = false, conn = null, tOpen, tMsg;
+      function fin(v) {
+        if (done) return;
+        done = true;
+        clearTimeout(tOpen); clearTimeout(tMsg);
+        try { conn && conn.close(); } catch (e) {}
+        resolve(v);
+      }
+      try {
+        conn = kind === 'ws' ? new WebSocket(url) : new EventSource(url);
+      } catch (e) { return fin('hata: ' + (e && e.message)); }
+      tOpen = setTimeout(function () { fin('ACILAMADI (engel / proxy)'); }, 7000);
+      function onOpen() {
+        if (opened) return;
+        opened = true;
+        clearTimeout(tOpen);
+        tMsg = setTimeout(function () { fin('ACIK AMA MESAJ GELMIYOR (proxy akisi biriktiriyor)'); }, 6000);
+        origFetch(base + '/' + topic, { method: 'POST', body: 'ping', headers: { 'Content-Type': 'text/plain' } }).catch(function () {});
+      }
+      function onMsg(data) {
+        try {
+          var j = JSON.parse(data);
+          if (j && j.event === 'message') fin('OK (canli akis calisiyor)');
+        } catch (e) {}
+      }
+      if (kind === 'ws') {
+        conn.onopen = onOpen;
+        conn.onmessage = function (e) { onMsg(e.data); };
+        conn.onerror = function () {};
+      } else {
+        conn.onopen = onOpen;
+        conn.onmessage = function (e) { onMsg(e.data); };
+        conn.onerror = function () {};
+      }
+    });
+  }
+  function testHttp(base) {
+    var t0 = Date.now();
+    return origFetch(base + '/chronopulse_global_v2/json?poll=1&since=1s').then(
+      function (res) { return (res.ok ? 'OK' : 'HTTP ' + res.status + (res.status === 429 ? ' (hiz siniri - ortak IP dolu)' : '')) + ' [' + (Date.now() - t0) + ' ms]'; },
+      function (e) { return 'ENGELLI / ULASILAMIYOR (' + (e && e.message || 'hata') + ')'; }
+    );
+  }
+  function runNetCheck(log) {
+    var bases = [{ name: 'ntfy.sh', url: 'https://ntfy.sh' }];
+    if (RELAY) bases.push({ name: 'relay', url: RELAY });
+    var chain = Promise.resolve();
+    var summary = [];
+    bases.forEach(function (b) {
+      chain = chain.then(function () { log('--- ' + b.name + ' ---'); return testHttp(b.url); })
+        .then(function (h) { log('HTTPS istegi : ' + h); summary.push({ b: b.name, http: /^OK/.test(h) }); return testStream(b.url, 'ws'); })
+        .then(function (w) { log('WebSocket    : ' + w); summary[summary.length - 1].ws = /^OK/.test(w); return testStream(b.url, 'sse'); })
+        .then(function (e) { log('SSE akisi    : ' + e); summary[summary.length - 1].sse = /^OK/.test(e); });
+    });
+    return chain.then(function () {
+      var c = lex('mqttClient');
+      log('MQTT         : ' + (c && c.connected ? 'baglandi' : 'baglanamadi (yedek, 443 disi port)'));
+      var anyLive = summary.some(function (x) { return x.ws || x.sse; });
+      var anyHttp = summary.some(function (x) { return x.http; });
+      log('');
+      if (anyLive) log('SONUC: Canli akis var. 1v1 ve liderlik tablosu tam hizda calisir.');
+      else if (anyHttp) log('SONUC: Sadece normal HTTPS geciyor. Uzun-yoklama yedegi devreye girer: calisir ama birkac saniye gecikmeli.');
+      else log('SONUC: Bu aga ntfy.sh (ve relay) ulasamiyor. Kendi alan adinda relay gerekir veya ag yoneticisinden izin istenmeli.');
+      return summary;
+    });
+  }
+  window.__cpNetCheck = function () {
+    var lines = [];
+    return runNetCheck(function (l) { lines.push(l); try { console.log('[netcheck] ' + l); } catch (e) {} }).then(function () { return lines.join('\n'); });
+  };
+  function initNetCheck() {
+    try {
+      if (String(location.hash || '').indexOf('netcheck') < 0) return;
+      var box = document.createElement('pre');
+      box.style.cssText = 'position:fixed;left:8px;right:8px;top:8px;z-index:100000;margin:0;padding:10px 12px;' +
+        'background:rgba(2,6,23,.96);color:#e2e8f0;font:12px/1.5 monospace;border:2px solid #38bdf8;' +
+        'border-radius:10px;white-space:pre-wrap;max-height:80vh;overflow:auto';
+      box.textContent = 'Ag testi basladi, 40 sn kadar surer...\n';
+      document.body.appendChild(box);
+      runNetCheck(function (l) { box.textContent += l + '\n'; });
+    } catch (e) {}
+  }
+
   /* ============================================================ DEBUG VIEW */
   function status() {
     var ws = lex('universalWs'), es = lex('universalEventSource'), c = lex('mqttClient');
@@ -570,6 +861,8 @@
       players: map && map.size != null ? map.size : '?',
       localRecords: localRecords().length,
       stats: stats,
+      relay: RELAY || 'off',
+      longPoll: lp.active,
       fails: fails
     };
   }
@@ -577,7 +870,9 @@
   window.__cpSyncFix = {
     chunkRecords: chunkRecords, parseNdjson: parseNdjson, recKey: recKey,
     reconcile: function () { scheduleReconcile('manual', 100); },
-    forceReconnect: forceReconnect, status: status
+    forceReconnect: forceReconnect, status: status,
+    startLongPoll: startLongPoll, stopLongPoll: stopLongPoll, lp: lp,
+    readBases: readBases, publishMissing: publishMissing, handleItem: handleItem
   };
 
   function initDebug() {
@@ -593,7 +888,8 @@
         box.textContent = 'ws:' + s.ws + ' sse:' + s.sse + ' mqtt:' + s.mqtt + ' players:' + s.players +
           '\nrecords:' + s.localRecords + ' cloud:' + s.stats.cloudRecs + ' lastHTTP:' + s.stats.lastStatus +
           '\nposts:' + s.stats.posts + ' dropped:' + s.stats.dropped + ' retried:' + s.stats.retried +
-          ' failed:' + s.stats.failed + ' reconnects:' + s.stats.reconnects;
+          ' failed:' + s.stats.failed + ' reconnects:' + s.stats.reconnects +
+          '\nlongpoll:' + s.longPoll + ' lpMsgs:' + s.stats.lpMsgs + ' relay:' + s.relay + ' relayMsgs:' + s.stats.relayMsgs;
       }, 1500);
     } catch (e) {}
   }
@@ -603,6 +899,8 @@
     installRealtimeWrapper();
     installInitBackoff();
     initDebug();
+    initNetCheck();
+    startRelay();
     scheduleReconcile('start', 2500);
     setTimeout(function () { scheduleReconcile('start2', 100); }, 12000);
   }
